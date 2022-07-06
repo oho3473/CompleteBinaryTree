@@ -30,6 +30,7 @@ bool CompleteBinaryTree::Search(Node* node, int value)
 	return (node->value == value) || Search(node->left, value) || Search(node->right, value);
 }
 
+//왼쪽 끝 노드 와 오른쪽 끝 노드의 높이 비교
 bool CompleteBinaryTree::Squence(Node* node)
 {
 	if (node == nullptr)
@@ -39,6 +40,7 @@ bool CompleteBinaryTree::Squence(Node* node)
 	int rHeight = height(node->right) + 1;
 
 	return (lHeight - rHeight);
+	// 0 : 높이 같음, 1 : 왼쪽 노드가 높이 큼
 }
 
 int CompleteBinaryTree::height(Node* node)
@@ -85,19 +87,19 @@ Node* CompleteBinaryTree::AddNode(Node* node, int value)
 	//자식 둘
 	else
 	{
-		//높이같고 오른쪽이 가득 참
+		//높이같고 오른쪽 비어있는가?
 		if(Squence(node) == 0 && CheckCBT(node->right))
 			return AddNode(node->right, value);
 
-		//자식들의 높이가 같을때 왼쪽추가
+		//높이가 같을때 왼쪽추가
 		if (Squence(node) == 0)
 			return AddNode(node->left, value);
 
-		//왼쪽자식이 크고 왼쪽이 가득 참
+		//왼쪽 높이가 크고 왼쪽 비어있는가
 		if(Squence(node) == 1 && CheckCBT(node->left))
 			return AddNode(node->left, value);
 
-		//왼쪽자식이 클때
+		//왼쪽 높이 클때
 		if (Squence(node) == 1)
 			return AddNode(node->right, value);
 	}
@@ -105,7 +107,7 @@ Node* CompleteBinaryTree::AddNode(Node* node, int value)
 	return node;
 }
 
-//부분으로 쪼개서 왼쪽 높이가 큰지 아닌지?
+//부분으로 쪼개서 자식이 있는가?
 bool CompleteBinaryTree::CheckCBT(Node* node)
 {
 	if (node == nullptr)
@@ -114,12 +116,14 @@ bool CompleteBinaryTree::CheckCBT(Node* node)
 
 	bool x = CheckCBT(node->left);
 
+	//왼쪽 자식이 있는 경우
 	if (Squence(node))
 		return true;
 	
 	bool y = CheckCBT(node->right);
 
 	return x || y;
+	//true : 왼쪽 자식 있음 false : 자식없음
 }
 
 
